@@ -1,176 +1,449 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <title>Story Points Calculator</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f3f6fb;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Story Points Calculator</title>
 
-    .card {
-      background: #ffffff;
-      padding: 20px 24px;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      max-width: 420px;
-      width: 100%;
-    }
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
 
-    h1 {
-      font-size: 20px;
-      margin-top: 0;
-      text-align: center;
-    }
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
 
-    .field {
-      margin-bottom: 12px;
-    }
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --success-gradient: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            --warning-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --info-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
 
-    label {
-      display: block;
-      font-weight: bold;
-      margin-bottom: 4px;
-    }
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-    select {
-      width: 100%;
-      padding: 6px 8px;
-      border-radius: 4px;
-      border: 1px solid #ccc;
-      font-size: 14px;
-    }
+        .calculator-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 2.5rem;
+            max-width: 500px;
+            width: 100%;
+            animation: slideUp 0.5s ease-out;
+        }
 
-    button {
-      width: 100%;
-      padding: 8px 12px;
-      margin-top: 10px;
-      border: none;
-      border-radius: 4px;
-      background: #326fd6;
-      color: #fff;
-      font-size: 15px;
-      cursor: pointer;
-    }
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
 
-    button:hover {
-      background: #2858ab;
-    }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-    .result {
-      margin-top: 16px;
-      font-size: 18px;
-      text-align: center;
-      font-weight: bold;
-    }
+        .card-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid #e9ecef;
+        }
 
-    .error {
-      color: #c0392b;
-      font-size: 13px;
-      text-align: center;
-      margin-top: 6px;
-    }
-  </style>
+        .card-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 0;
+        }
+
+        .card-header .icon-wrapper {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 1rem;
+            background: var(--primary-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .card-header .icon-wrapper i {
+            font-size: 1.8rem;
+            color: white;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-label i {
+            color: #667eea;
+        }
+
+        .form-select {
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background-color: #fff;
+        }
+
+        .form-select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.25rem rgba(102, 126, 234, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .form-select:hover {
+            border-color: #667eea;
+        }
+
+        .btn-calculate {
+            background: var(--primary-gradient);
+            border: none;
+            border-radius: 12px;
+            padding: 0.875rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: white;
+            width: 100%;
+            margin-top: 1.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-calculate::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn-calculate:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-calculate:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.5);
+        }
+
+        .btn-calculate:active {
+            transform: translateY(-1px);
+        }
+
+        .btn-calculate i {
+            margin-right: 0.5rem;
+        }
+
+        .result-container {
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .result-box {
+            background: var(--success-gradient);
+            border-radius: 15px;
+            padding: 1.5rem;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+            box-shadow: 0 10px 25px rgba(17, 153, 142, 0.3);
+            animation: pulse 2s infinite;
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.02);
+            }
+        }
+
+        .result-box.empty {
+            background: #e9ecef;
+            color: #6c757d;
+            animation: none;
+        }
+
+        .result-box i {
+            margin-right: 0.5rem;
+            font-size: 1.3rem;
+        }
+
+        .alert {
+            border-radius: 12px;
+            border: none;
+            margin-top: 1rem;
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-10px);
+            }
+
+            75% {
+                transform: translateX(10px);
+            }
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            animation: fadeIn 0.5s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .form-group:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .form-group:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .form-group:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .badge-custom {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+
+        .badge-small {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+        }
+
+        .badge-medium {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .badge-large {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+    </style>
 </head>
+
 <body>
-  <div class="card">
-    <h1>Points Calculator</h1>
+    <div class="calculator-card">
+        <div class="card-header">
+            <div class="icon-wrapper">
+                <i class="bi bi-calculator"></i>
+            </div>
+            <h1>Story Points Calculator</h1>
+        </div>
 
-    <div class="field">
-      <label for="uncertainty">Uncertainty</label>
-      <select id="uncertainty">
-        <option value="Small">Small</option>
-        <option value="Medium">Medium</option>
-        <option value="Large">Large</option>
-      </select>
+        <form id="calculatorForm">
+            <div class="form-group">
+                <label for="uncertainty" class="form-label">
+                    <i class="bi bi-question-circle"></i>
+                    Uncertainty
+                </label>
+                <select class="form-select" id="uncertainty" required>
+                    <option value="Small">Small</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Large">Large</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="complexity" class="form-label">
+                    <i class="bi bi-diagram-3"></i>
+                    Complexity
+                </label>
+                <select class="form-select" id="complexity" required>
+                    <option value="Small">Small</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Large">Large</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="effort" class="form-label">
+                    <i class="bi bi-hourglass-split"></i>
+                    Effort
+                </label>
+                <select class="form-select" id="effort" required>
+                    <option value="Small">Small</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Large">Large</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-calculate" id="calcBtn">
+                <i class="bi bi-calculator-fill"></i>
+                Calculate Points
+            </button>
+        </form>
+
+        <div class="result-container">
+            <div class="result-box empty" id="pointsResult">
+                <i class="bi bi-dash-circle"></i>
+                <span>Points: –</span>
+            </div>
+            <div id="errorMsg"></div>
+        </div>
     </div>
 
-    <div class="field">
-      <label for="complexity">Complexity</label>
-      <select id="complexity">
-        <option value="Small">Small</option>
-        <option value="Medium">Medium</option>
-        <option value="Large">Large</option>
-      </select>
-    </div>
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-    <div class="field">
-      <label for="effort">Effort</label>
-      <select id="effort">
-        <option value="Small">Small</option>
-        <option value="Medium">Medium</option>
-        <option value="Large">Large</option>
-      </select>
-    </div>
+    <script>
+        // Mapping from (Uncertainty, Complexity, Effort) to Points
+        const pointsTable = {
+            "Small|Small|Small": 1,
+            "Small|Small|Medium": 2,
+            "Small|Small|Large": 5,
 
-    <button id="calcBtn">Calculate Points</button>
+            "Small|Medium|Small": 2,
+            "Small|Medium|Medium": 3,
+            "Small|Medium|Large": 5,
 
-    <div class="result" id="pointsResult">Points: –</div>
-    <div class="error" id="errorMsg"></div>
-  </div>
+            "Small|Large|Small": 3,
+            "Small|Large|Medium": 5,
+            "Small|Large|Large": 8,
 
-  <script>
-    // Mapping from (Uncertainty, Complexity, Effort) to Points
-    const pointsTable = {
-      "Small|Small|Small": 1,
-      "Small|Small|Medium": 2,
-      "Small|Small|Large": 5,
+            "Medium|Small|Small": 3,
+            "Medium|Small|Medium": 5,
+            "Medium|Small|Large": 8,
 
-      "Small|Medium|Small": 2,
-      "Small|Medium|Medium": 3,
-      "Small|Medium|Large": 5,
+            "Medium|Medium|Small": 5,
+            "Medium|Medium|Medium": 5,
+            "Medium|Medium|Large": 8,
 
-      "Small|Large|Small": 3,
-      "Small|Large|Medium": 5,
-      "Small|Large|Large": 8,
+            "Medium|Large|Small": 5,
+            "Medium|Large|Medium": 8,
 
-      "Medium|Small|Small": 3,
-      "Medium|Small|Medium": 5,
-      "Medium|Small|Large": 8,
+            "Large|Medium|Small": 8,
+            "Large|Medium|Medium": 8,
+            "Large|Medium|Large": 13,
 
-      "Medium|Medium|Small": 5,
-      "Medium|Medium|Medium": 5,
-      "Medium|Medium|Large": 8,
+            "Large|Large|Small": 8,
+            "Large|Large|Medium": 13,
+            "Large|Large|Large": 13
+        };
 
-      "Medium|Large|Small": 5,
-      "Medium|Large|Medium": 8,
+        const calcBtn = document.getElementById("calcBtn");
+        const resultEl = document.getElementById("pointsResult");
+        const errorEl = document.getElementById("errorMsg");
+        const form = document.getElementById("calculatorForm");
 
-      "Large|Medium|Small": 8,
-      "Large|Medium|Medium": 8,
-      "Large|Medium|Large": 13,
+        // Calculate on form submit
+        form.addEventListener("submit", function (e) {
+            e.preventDefault();
+            calculatePoints();
+        });
 
-      "Large|Large|Small": 8,
-      "Large|Large|Medium": 13,
-      "Large|Large|Large": 13
-    };
+        // Also calculate when any select changes
+        document.querySelectorAll('.form-select').forEach(select => {
+            select.addEventListener('change', function () {
+                // Auto-calculate when all fields are filled
+                const uncertainty = document.getElementById("uncertainty").value;
+                const complexity = document.getElementById("complexity").value;
+                const effort = document.getElementById("effort").value;
 
-    const calcBtn = document.getElementById("calcBtn");
-    const resultEl = document.getElementById("pointsResult");
-    const errorEl = document.getElementById("errorMsg");
+                if (uncertainty && complexity && effort) {
+                    calculatePoints();
+                }
+            });
+        });
 
-    calcBtn.addEventListener("click", function () {
-      const uncertainty = document.getElementById("uncertainty").value;
-      const complexity = document.getElementById("complexity").value;
-      const effort = document.getElementById("effort").value;
+        function calculatePoints() {
+            const uncertainty = document.getElementById("uncertainty").value;
+            const complexity = document.getElementById("complexity").value;
+            const effort = document.getElementById("effort").value;
 
-      const key = `${uncertainty}|${complexity}|${effort}`;
-      const points = pointsTable[key];
+            const key = `${uncertainty}|${complexity}|${effort}`;
+            const points = pointsTable[key];
 
-      if (points !== undefined) {
-        resultEl.textContent = `Points: ${points}`;
-        errorEl.textContent = "";
-      } else {
-        resultEl.textContent = "Points: –";
-        errorEl.textContent = "No points defined for this combination in the table.";
-      }
-    });
-  </script>
+            // Add loading animation
+            resultEl.classList.add('empty');
+            resultEl.innerHTML = '<i class="bi bi-hourglass-split"></i><span>Calculating...</span>';
+
+            // Simulate a brief delay for better UX
+            setTimeout(() => {
+                if (points !== undefined) {
+                    resultEl.classList.remove('empty');
+                    resultEl.innerHTML = `<i class="bi bi-check-circle-fill"></i><span>Points: ${points}</span>`;
+                    errorEl.innerHTML = '';
+
+                    // Add success animation
+                    resultEl.style.animation = 'none';
+                    setTimeout(() => {
+                        resultEl.style.animation = 'pulse 2s infinite';
+                    }, 10);
+                } else {
+                    resultEl.classList.add('empty');
+                    resultEl.innerHTML = '<i class="bi bi-dash-circle"></i><span>Points: –</span>';
+                    errorEl.innerHTML = '<div class="alert alert-danger"><i class="bi bi-exclamation-triangle-fill"></i> No points defined for this combination in the table.</div>';
+                }
+            }, 300);
+        }
+    </script>
 </body>
+
 </html>
