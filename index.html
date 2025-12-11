@@ -23,11 +23,17 @@
         body {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .container-wrapper {
+            max-width: 1400px;
+            margin: 0 auto;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
         }
 
         .calculator-card {
@@ -36,9 +42,62 @@
             border-radius: 20px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             padding: 2.5rem;
-            max-width: 500px;
             width: 100%;
             animation: slideUp 0.5s ease-out;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .reference-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 2rem;
+            width: 100%;
+            animation: slideUp 0.5s ease-out;
+            animation-delay: 0.2s;
+            animation-fill-mode: both;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .reference-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e9ecef;
+            flex-shrink: 0;
+        }
+
+        .reference-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .reference-image {
+            width: 100%;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+            flex: 1;
+            object-fit: contain;
+        }
+
+        .reference-image:hover {
+            transform: scale(1.02);
         }
 
         @keyframes slideUp {
@@ -119,52 +178,6 @@
             border-color: #667eea;
         }
 
-        .btn-calculate {
-            background: var(--primary-gradient);
-            border: none;
-            border-radius: 12px;
-            padding: 0.875rem 2rem;
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: white;
-            width: 100%;
-            margin-top: 1.5rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-calculate::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-
-        .btn-calculate:hover::before {
-            width: 300px;
-            height: 300px;
-        }
-
-        .btn-calculate:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.5);
-        }
-
-        .btn-calculate:active {
-            transform: translateY(-1px);
-        }
-
-        .btn-calculate i {
-            margin-right: 0.5rem;
-        }
 
         .result-container {
             margin-top: 2rem;
@@ -184,6 +197,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: background 0.5s ease;
         }
 
         @keyframes pulse {
@@ -285,67 +299,96 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
         }
+
+        @media (max-width: 991.98px) {
+            .container-wrapper {
+                min-height: auto;
+                padding: 20px 0;
+            }
+
+            .reference-card {
+                margin-top: 2rem;
+            }
+        }
     </style>
 </head>
 
 <body>
-    <div class="calculator-card">
-        <div class="card-header">
-            <div class="icon-wrapper">
-                <i class="bi bi-calculator"></i>
-            </div>
-            <h1>Story Points Calculator</h1>
-        </div>
+    <div class="container-wrapper">
+        <div class="container">
+            <div class="row g-4 align-items-stretch">
+                <!-- Calculator Column -->
+                <div class="col-lg-6">
+                    <div class="calculator-card">
+                        <div class="card-header">
+                            <div class="icon-wrapper">
+                                <i class="bi bi-calculator"></i>
+                            </div>
+                            <h1>Story Points Calculator</h1>
+                        </div>
 
-        <form id="calculatorForm">
-            <div class="form-group">
-                <label for="uncertainty" class="form-label">
-                    <i class="bi bi-question-circle"></i>
-                    Uncertainty
-                </label>
-                <select class="form-select" id="uncertainty" required>
-                    <option value="Small">Small</option>
-                    <option value="Medium">Medium</option>
-                    <option value="Large">Large</option>
-                </select>
-            </div>
+                        <form id="calculatorForm">
+                            <div class="form-group">
+                                <label for="uncertainty" class="form-label">
+                                    <i class="bi bi-question-circle"></i>
+                                    Uncertainty
+                                </label>
+                                <select class="form-select" id="uncertainty" required>
+                                    <option value="Small">Small</option>
+                                    <option value="Medium">Medium</option>
+                                    <option value="Large">Large</option>
+                                </select>
+                            </div>
 
-            <div class="form-group">
-                <label for="complexity" class="form-label">
-                    <i class="bi bi-diagram-3"></i>
-                    Complexity
-                </label>
-                <select class="form-select" id="complexity" required>
-                    <option value="Small">Small</option>
-                    <option value="Medium">Medium</option>
-                    <option value="Large">Large</option>
-                </select>
-            </div>
+                            <div class="form-group">
+                                <label for="complexity" class="form-label">
+                                    <i class="bi bi-diagram-3"></i>
+                                    Complexity
+                                </label>
+                                <select class="form-select" id="complexity" required>
+                                    <option value="Small">Small</option>
+                                    <option value="Medium">Medium</option>
+                                    <option value="Large">Large</option>
+                                </select>
+                            </div>
 
-            <div class="form-group">
-                <label for="effort" class="form-label">
-                    <i class="bi bi-hourglass-split"></i>
-                    Effort
-                </label>
-                <select class="form-select" id="effort" required>
-                    <option value="Small">Small</option>
-                    <option value="Medium">Medium</option>
-                    <option value="Large">Large</option>
-                </select>
-            </div>
+                            <div class="form-group">
+                                <label for="effort" class="form-label">
+                                    <i class="bi bi-hourglass-split"></i>
+                                    Effort
+                                </label>
+                                <select class="form-select" id="effort" required>
+                                    <option value="Small">Small</option>
+                                    <option value="Medium">Medium</option>
+                                    <option value="Large">Large</option>
+                                </select>
+                            </div>
 
-            <button type="submit" class="btn btn-calculate" id="calcBtn">
-                <i class="bi bi-calculator-fill"></i>
-                Calculate Points
-            </button>
-        </form>
+                        </form>
 
-        <div class="result-container">
-            <div class="result-box empty" id="pointsResult">
-                <i class="bi bi-dash-circle"></i>
-                <span>Points: –</span>
+                        <div class="result-container">
+                            <div class="result-box empty" id="pointsResult">
+                                <i class="bi bi-dash-circle"></i>
+                                <span>Points: –</span>
+                            </div>
+                            <div id="errorMsg"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reference Image Column -->
+                <div class="col-lg-6">
+                    <div class="reference-card">
+                        <div class="reference-header">
+                            <h2>
+                                <i class="bi bi-table"></i>
+                                Reference Table
+                            </h2>
+                        </div>
+                        <img src="image.png" alt="Story Points Reference Table" class="reference-image" />
+                    </div>
+                </div>
             </div>
-            <div id="errorMsg"></div>
         </div>
     </div>
 
@@ -387,30 +430,52 @@
             "Large|Large|Large": 13
         };
 
-        const calcBtn = document.getElementById("calcBtn");
         const resultEl = document.getElementById("pointsResult");
         const errorEl = document.getElementById("errorMsg");
-        const form = document.getElementById("calculatorForm");
 
-        // Calculate on form submit
-        form.addEventListener("submit", function (e) {
-            e.preventDefault();
+        // Auto-calculate when any select changes
+        document.querySelectorAll('.form-select').forEach(select => {
+            select.addEventListener('change', function () {
+                calculatePoints();
+            });
+        });
+
+        // Calculate on page load if all fields have values
+        window.addEventListener('DOMContentLoaded', function () {
             calculatePoints();
         });
 
-        // Also calculate when any select changes
-        document.querySelectorAll('.form-select').forEach(select => {
-            select.addEventListener('change', function () {
-                // Auto-calculate when all fields are filled
-                const uncertainty = document.getElementById("uncertainty").value;
-                const complexity = document.getElementById("complexity").value;
-                const effort = document.getElementById("effort").value;
+        function getColorForPoints(points) {
+            // Normalize points to 0-1 scale (1 = 0, 13 = 1)
+            const normalized = (points - 1) / (13 - 1);
 
-                if (uncertainty && complexity && effort) {
-                    calculatePoints();
-                }
-            });
-        });
+            // Green color (RGB: 34, 197, 94) - for point 1
+            const greenR = 34;
+            const greenG = 197;
+            const greenB = 94;
+
+            // Red color (RGB: 239, 68, 68) - for point 13
+            const redR = 239;
+            const redG = 68;
+            const redB = 68;
+
+            // Calculate the color at the current points position
+            const r = Math.round(greenR + (redR - greenR) * normalized);
+            const g = Math.round(greenG + (redG - greenG) * normalized);
+            const b = Math.round(greenB + (redB - greenB) * normalized);
+
+            // Create a left-to-right gradient that shows the full scale
+            // The gradient goes from green (left, point 1) to red (right, point 13)
+            // The stop position shows where the current points value falls on the scale
+            const stopPosition = normalized * 100;
+
+            // Create gradient: green on left, transitioning to red on right
+            // The gradient visually represents the 1-13 scale
+            return `linear-gradient(to right, 
+                rgb(${greenR}, ${greenG}, ${greenB}) 0%, 
+                rgb(${r}, ${g}, ${b}) ${stopPosition}%, 
+                rgb(${redR}, ${redG}, ${redB}) 100%)`;
+        }
 
         function calculatePoints() {
             const uncertainty = document.getElementById("uncertainty").value;
@@ -430,6 +495,17 @@
                     resultEl.classList.remove('empty');
                     resultEl.innerHTML = `<i class="bi bi-check-circle-fill"></i><span>Points: ${points}</span>`;
                     errorEl.innerHTML = '';
+
+                    // Apply dynamic gradient based on points value
+                    const gradient = getColorForPoints(points);
+                    resultEl.style.background = gradient;
+
+                    // Update shadow color to match the gradient
+                    const normalized = (points - 1) / (13 - 1);
+                    const shadowR = Math.round(34 + (239 - 34) * normalized);
+                    const shadowG = Math.round(197 + (68 - 197) * normalized);
+                    const shadowB = Math.round(94 + (68 - 94) * normalized);
+                    resultEl.style.boxShadow = `0 10px 25px rgba(${shadowR}, ${shadowG}, ${shadowB}, 0.4)`;
 
                     // Add success animation
                     resultEl.style.animation = 'none';
