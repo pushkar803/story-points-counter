@@ -446,9 +446,6 @@
         });
 
         function getColorForPoints(points) {
-            // Normalize points to 0-1 scale (1 = 0, 13 = 1)
-            const normalized = (points - 1) / (13 - 1);
-
             // Green color (RGB: 34, 197, 94) - for point 1
             const greenR = 34;
             const greenG = 197;
@@ -458,6 +455,20 @@
             const redR = 239;
             const redG = 68;
             const redB = 68;
+
+            // For point 1: return solid green
+            if (points === 1) {
+                return `rgb(${greenR}, ${greenG}, ${greenB})`;
+            }
+
+            // For point 13: return solid red
+            if (points === 13) {
+                return `rgb(${redR}, ${redG}, ${redB})`;
+            }
+
+            // For points in between: create a gradient from green to red
+            // Normalize points to 0-1 scale (1 = 0, 13 = 1)
+            const normalized = (points - 1) / (13 - 1);
 
             // Calculate the color at the current points position
             const r = Math.round(greenR + (redR - greenR) * normalized);
@@ -496,11 +507,11 @@
                     resultEl.innerHTML = `<i class="bi bi-check-circle-fill"></i><span>Points: ${points}</span>`;
                     errorEl.innerHTML = '';
 
-                    // Apply dynamic gradient based on points value
-                    const gradient = getColorForPoints(points);
-                    resultEl.style.background = gradient;
+                    // Apply dynamic color/gradient based on points value
+                    const colorOrGradient = getColorForPoints(points);
+                    resultEl.style.background = colorOrGradient;
 
-                    // Update shadow color to match the gradient
+                    // Update shadow color to match the color
                     const normalized = (points - 1) / (13 - 1);
                     const shadowR = Math.round(34 + (239 - 34) * normalized);
                     const shadowG = Math.round(197 + (68 - 197) * normalized);
